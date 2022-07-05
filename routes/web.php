@@ -1,16 +1,8 @@
 <?php
 
-use App\Http\Controllers\cobacobacontroller;
-use App\Http\Controllers\DistribusiJamPMA2BController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\PDFViewController;
 use App\Http\Controllers\MPTableController;
-use App\Http\Controllers\PopulasiUnitPMA2BController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\testingController;
-use App\Http\Controllers\TPController;
-use Doctrine\DBAL\Schema\Index;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,5 +25,9 @@ Route::post('/tabel-mp/show', [MPTableController::class, 'getUserbyid'])->name('
 Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
+// Login
+Route::post('custom-login', [C])
+
 
 require __DIR__.'/auth.php';
