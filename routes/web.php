@@ -30,12 +30,8 @@ Route::get('/', function () {
 
 Route::get('/tabel-mp', [MPTableController::class, 'index'])->name('mp.index');
 Route::post('/tabel-mp/show', [MPTableController::class, 'getUserbyid'])->name('mp.show');
-Route::get('/distribusi-jam-tp', [TPController::class, 'index'])->name('distribusi-jam-tp.index');
-Route::get('/distribusi-jam-tp/pdf', [TPController::class, 'downloadPDF'])->name('distribusi-jam-tp.pdf');
 Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-Route::get('/populasi-unit-pma2b', [PopulasiUnitPMA2BController::class, 'index'])->name('pma2b.populasi.index');
-Route::get('/distribusi-jam-pma2b', [DistribusiJamPMA2BController::class, 'index'])->name('pma2b.distribusi.index');
 
 require __DIR__.'/auth.php';
