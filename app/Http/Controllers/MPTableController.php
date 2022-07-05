@@ -57,4 +57,16 @@ class MPTableController extends Controller
         }
         
     }
+
+    public function getUserbyid(Request $request){
+ 
+        $userid = $request->userid;
+   
+        $data = DB::table('mp_biodata')->select('*')->where('id', $userid)->get();
+   
+        // Fetch all records
+        $response['data'] = $data;
+   
+        return response()->json($response);
+    }
 }

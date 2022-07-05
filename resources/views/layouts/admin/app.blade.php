@@ -15,6 +15,9 @@
       defer
     ></script>
     <script src="{{asset('js/init-alpine.js')}}"></script>
+    <script src=
+      "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js">
+    </script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"
@@ -26,6 +29,7 @@
     <script src="{{asset('js/charts-lines.js')}}" defer></script>
     <script src="{{asset('js/dragup.js')}}" defer></script>
     <script src="{{asset('js/charts-pie.js')}}" defer></script>
+    <meta name="csrf-token" content="{{csrf_token()}}"/>
     <title>PT RCI | PMA 2023</title>
 </head>
 <body>
@@ -853,7 +857,7 @@
         x-transition:leave-end="opacity-0  transform translate-y-1/2"
         @click.away="closeModal2"
         @keydown.escape="closeModal2"
-        class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
+        class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl md:max-w-7xl md:h-auto"
         role="dialog"
         id="modal2"
       >

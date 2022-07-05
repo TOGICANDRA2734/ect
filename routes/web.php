@@ -29,6 +29,7 @@ Route::get('/', function () {
 })->name('dashboard');
 
 Route::get('/tabel-mp', [MPTableController::class, 'index'])->name('mp.index');
+Route::post('/tabel-mp/show', [MPTableController::class, 'getUserbyid'])->name('mp.show');
 Route::get('/distribusi-jam-tp', [TPController::class, 'index'])->name('distribusi-jam-tp.index');
 Route::get('/distribusi-jam-tp/pdf', [TPController::class, 'downloadPDF'])->name('distribusi-jam-tp.pdf');
 Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');

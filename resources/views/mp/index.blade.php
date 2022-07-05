@@ -43,7 +43,7 @@
         <!-- Content Table -->
         <div class="w-full overflow-hidden rounded-lg shadow-xs mt-5 mb-5">
             <div class="w-full overflow-x-auto">
-                <table id="mp" class="w-full whitespace-no-wrap border">
+                <table class="w-full whitespace-no-wrap border">
                     <thead class="bg-stone-800">
                         <tr class="text-xs font-semibold tracking-wide text-center text-white uppercase dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3 border-b border-r border-stone">Site</th>
@@ -60,35 +60,21 @@
 
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach($data as $dt)
-                            <tr>
-                                @foreach($dt as $key => $values)
-                                    @if($key == "id")
-                                        <td class="bg-red-100 flex align-middle">
-                                            <button @click="openModal2" name="tbDetail" class="tbDetail border bg-black text-white p-2" value="{{$values}}">{{$values}}</button>
-                                        </td>
-                                    @else
-                                        <td>{{$values}}</td>
-                                    @endif
-                                @endforeach
-                            </tr>
-                        @endforeach
-                        
-                    
-                        <!-- @foreach($data as $dt)
                             <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150" onclick="changeColor(this)">
                                 @foreach($dt as $key => $value)
-                                    <td class="px-4 py-3 text-sm">
-                                        {{$value}} 
-                                    </td>
+                                    @if($key != 'id')
+                                        <td class="px-4 py-3 text-sm">
+                                            {{$value}} 
+                                        </td>
+                                    @endif
                                 @endforeach
                                 <td>
-                                    {{$dt->id}}
-                                    <button @click="openModal2" data-id="{{$dt->id}}" class="edit-modal px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-stone-800 border border-transparent rounded-lg active:bg-stone-600 hover:bg-stone-700 focus:outline-none focus:shadow-outline-purple">
+                                    <button @click="openModal2" value="{{$dt->id}}" class="tbDetail px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-stone-800 border border-transparent rounded-lg active:bg-stone-600 hover:bg-stone-700 focus:outline-none focus:shadow-outline-purple">
                                         Detail
                                     </button>
                                 </td>
                             </tr>                    
-                        @endforeach -->
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -108,41 +94,259 @@
 
 @section('javascripts')
 <script>
-    $('.tbDetail').on('click', function(){
-        console.log($(this).val())
-    })
-
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     
+    $(document).ready(function(){
+      // Search by userid
+      $('.tbDetail').click(function(){
+        var userid = $(this).val();
+        
+        if(userid >= 0){
+
+            // AJAX POST request
+            $.ajax({
+                url: '/tabel-mp/show',
+                type: 'post',
+                data: {_token: CSRF_TOKEN, userid: userid},
+                dataType: 'json',
+                success: function(response){
+                    createRows(response);
+                }
+            });
+        }
+ 
+      });
+ 
+   });
+ 
+   // Create table rows
+   function createRows(response){
+        var len = 0;
+        $('#tablePersonal tbody').empty(); // Empty <tbody>
+        $('#tableKerja tbody').empty(); // Empty <tbody>
+        $('#modalImagePlaceholder div').empty(); // Empty <image>
+        if(response['data'] != null){
+            len = response['data'].length;
+        }
+        
+        var field_dismiss = ['id', 'foto1','foto2', 'ktp', 'time', 'user', 'del', 'sertifikasi', ]
+    
+        if(len > 0){
+            for(var i=0; i<len; i++){
+                var tr_str = "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].nik + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].nama + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].tempatlahir + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].tgllahir + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + Math.floor((new Date() - new Date(response['data'][0].tgllahir)) / (365.25*24*60*60*1000))   + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].agama + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].warganegara + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].statusnikah + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].pendidikan + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].ibukandung + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].kelamin + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].goldarah + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].rhesus+ "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].noktp + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].nokk + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].nonpwp + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].nobpjstk + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].nobpjskes + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].norek + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].nosimpol + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].typesimpol + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].masasimpol + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].alamatktp + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].provktp + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].kabktp + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].kecktp + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].kelktp + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].alamat + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].prov + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].kab + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].kec + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].kelktp + "</td>"
+                "</tr>";
+                $("#tablePersonal tbody").append(tr_str);
+
+                // Data Pekerjaan
+                var tr_str = "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].dept + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].jabatan + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].sttpegawai + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].gol + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].grade + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].mulaikerja + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].statuskary + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].akhirpkwt + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].tglpensiun + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].hpkary + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].vaksin1 + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].emailkary + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].namaistri + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].namaanak1 + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].namaanak2 + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].namaanak3 + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].tlpserumah + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].hubkel + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].telptakrmh + "</td>" +
+                    "<td class='px-4 py-3 text-sm'>" + response['data'][0].hubkel2 + "</td>";
+                    
+                "</tr>";
+                $("#tableKerja tbody").append(tr_str);
+
+
+                // Foto Pengguna
+                img_modal = "<img class='h-36 mr-3' src='http://192.168.20.100/manpower/"+ response['data'][0].foto1 +"' alt='Foto 1'>" 
+                + "<img class='h-36 mr-3' src='http://192.168.20.100/manpower/"+ response['data'][0].foto2 +"' alt='Foto 2'>"
+                + "<img class='h-36 mr-3' src='http://192.168.20.100/manpower/"+ response['data'][0].ktp +"' alt='Foto KTP'>";
+                $("#modalImagePlaceholder div").append(img_modal);
+            }
+        }else{
+            var tr_str = "<tr>" +
+            "<td align='center' colspan='"+ response['data'][0][value].length +"'>No record found.</td>" +
+            "</tr>";
+    
+            $("#tablePersonal tbody").append(tr_str);
+        }
+
+    } 
 </script>
 @endsection
 
 
 @section('modal-body')
+    <h2 class="font-bold text-xl mb-3">Data Detail</h2>
+    
+    <!-- Table -->
+    <div class="w-full overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-x-auto mt-3 mb-3">
+            <h2 class="font-bold mb-2">Data Pribadi</h2>
+            <table id='tablePersonal' class="w-full whitespace-no-wrap border table-auto">
+                <thead class="bg-stone-800">
+                    <tr class="text-xs font-semibold tracking-wide text-center text-white uppercase dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+                        <th class="px-4 py-3 border-b border-r border-stone">NIK</th>
+                        <th class="px-4 py-3 text-center border-r">Nama</th>
+                        <th class="px-4 py-3 text-center border-r">Tempat Lahir</th>
+                        <th class="px-4 py-3 text-center border-r">Tanggal Lahir</th>
+                        <th class="px-4 py-3 text-center border-r">Umur</th>
+                        <th class="px-4 py-3 border-b border-r border-stone">Agama</th>
+                        <th class="px-4 py-3 border-b border-r border-stone">Warga Negara</th>
+                        <th class="px-4 py-3 text-center border-r">Status Nikah</th>
+                        <th class="px-4 py-3 text-center border-r">Pendidikan</th>
+                        <th class="px-4 py-3 text-center border-r">Ibu Kandung</th>
+                        <th class="px-4 py-3 text-center border-r">Kelamin</th>
+                        <th class="px-4 py-3 text-center border-r">Gol. Darah</th>
+                        <th class="px-4 py-3 text-center border-r">Rhesus</th>
+                        <th class="px-4 py-3 text-center border-r">Nomor KTP</th>
+                        <th class="px-4 py-3 text-center border-r">No KK</th>
+                        <th class="px-4 py-3 text-center border-r">No NPWP</th>
+                        <th class="px-4 py-3 text-center border-r">No BPJSTK</th>
+                        <th class="px-4 py-3 text-center border-r">No BPJSKES</th>
+                        <th class="px-4 py-3 text-center border-r">No Rek</th>
+                        <th class="px-4 py-3 text-center border-r">No Simpol</th>
+                        <th class="px-4 py-3 text-center border-r">Type Simpol</th>
+                        <th class="px-4 py-3 text-center border-r">Masa Simpol</th>
+                        <th class="px-4 py-3 text-center border-r">Alamat KTP</th>
+                        <th class="px-4 py-3 text-center border-r">Provinsi KTP</th>
+                        <th class="px-4 py-3 text-center border-r">Kabupaten KTP</th>
+                        <th class="px-4 py-3 text-center border-r">Kecamatan KTP</th>
+                        <th class="px-4 py-3 text-center border-r">Kelurahan KTP</th>
+                        <th class="px-4 py-3 text-center border-r">Alamat</th>
+                        <th class="px-4 py-3 text-center border-r">Provinsi</th>
+                        <th class="px-4 py-3 text-center border-r">Kabupaten</th>
+                        <th class="px-4 py-3 text-center border-r">Kecamatan</th>
+                        <th class="px-4 py-3 text-center border-r">Kelurahan</th>
 
+                        <!-- <th class="px-4 py-3 text-center border-r">Dept.</th>
+                        <th class="px-4 py-3 text-center border-r">Grade</th>
+                        <th class="px-4 py-3 text-center border-r">Golongan</th>
+                        <th class="px-4 py-3 text-center border-r">Jabatan</th>
+                        <th class="px-4 py-3 text-center border-r">Mulai Kerja</th>
+                        <th class="px-4 py-3 text-center border-r">Status Karyawan</th>
+                        <th class="px-4 py-3 text-center border-r">Akhir Kontrak</th>
+                        <th class="px-4 py-3 text-center border-r">PPJPPKWT</th>
+                        <th class="px-4 py-3 text-center border-r">Tanggal Pensiun</th>
+                        <th class="px-4 py-3 text-center border-r">Status PPH</th>
+                        <th class="px-4 py-3 text-center border-r">Ibu Kandung</th>
+                        <th class="px-4 py-3 text-center border-r">Status Rumah</th>
+                        <th class="px-4 py-3 text-center border-r">Nama Istri</th>
+                        <th class="px-4 py-3 text-center border-r">Nama anak 1</th>
+                        <th class="px-4 py-3 text-center border-r">Nama anak 2</th>
+                        <th class="px-4 py-3 text-center border-r">Nama anak 3</th>
+                        <th class="px-4 py-3 text-center border-r">No HP</th>
+                        <th class="px-4 py-3 text-center border-r">Email</th>
+                        <th class="px-4 py-3 text-center border-r">Telp. Rumah</th>
+                        <th class="px-4 py-3 text-center border-r">Hubungan Kel</th>
+                        <th class="px-4 py-3 text-center border-r">TelpTaRumah</th>
+                        <th class="px-4 py-3 text-center border-r">HubKel12</th>
+                        <th class="px-4 py-3 text-center border-r">Sertifikasi</th>
+                        <th class="px-4 py-3 text-center border-r">Vaksin 1</th>
+                        <th class="px-4 py-3 text-center border-r">Vaksin 2</th>
+                        <th class="px-4 py-3 text-center border-r">Booster</th>
+                        <th class="px-4 py-3 text-center border-r">Keterangan</th>
+                        <th class="px-4 py-3 text-center border-r">Site</th>
+                        <th class="px-4 py-3 text-center border-r">Kode Site</th>
+                        <th class="px-4 py-3 text-center border-r">Status Pegawai</th> -->
+                    </tr>
+                </thead>
 
-
-<!--     
-    <input type="text" name="nama" id="nama">
-    <div class="grid grid-cols-1">
-        <table class="mb-5">
-            <thead>
-                <tr>
-                    <th class="border px-2 py-3">Nama</th>
-                    <th class="border px-2 py-3">NIK</th>
-                    <th class="border px-2 py-3">Nama</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="border px-2 py-3">{{$dt->nama}}</td>
-                    <td class="border px-2 py-3">{{$dt->nama}}</td>
-                    <td class="border px-2 py-3">{{$dt->nama}}</td>
-                </tr>
-            </tbody>
-        </table>
-        <label for="" class="mb-2 font-bold">Progress: Pending</label>
-        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                </tbody>
+            </table>
         </div>
-    </div> -->
+        <div class="w-full overflow-x-auto mt-3 mb-3">
+            <h2 class="font-bold mb-2">Data Kerja</h2>
+            <table id='tableKerja' class="w-full whitespace-no-wrap border table-auto">
+                <thead class="bg-stone-800">
+                    <tr class="text-xs font-semibold tracking-wide text-center text-white uppercase dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+                        <th class="px-4 py-3 text-center border-r">Departemen</th>
+                        <th class="px-4 py-3 text-center border-r">Jabatan</th>
+                        <th class="px-4 py-3 text-center border-r">Status Pegawai</th>
+                        <th class="px-4 py-3 text-center border-r">Golongan</th>
+                        <th class="px-4 py-3 text-center border-r">Grade</th>
+                        <th class="px-4 py-3 text-center border-r">Mulai Kerja</th>
+                        <th class="px-4 py-3 text-center border-r">Status Karyawan</th>
+                        <th class="px-4 py-3 text-center border-r">Akhir Kontrak</th>
+                        <th class="px-4 py-3 text-center border-r">Tanggal Pensiun</th>
+                        <th class="px-4 py-3 text-center border-r">No HP</th>
+                        <th class="px-4 py-3 text-center border-r">Vaksin Covid-19</th>
+                        <th class="px-4 py-3 text-center border-r">Email</th>
+                        <th class="px-4 py-3 text-center border-r">Nama Istri</th>
+                        <th class="px-4 py-3 text-center border-r">Nama Anak 1</th>
+                        <th class="px-4 py-3 text-center border-r">Nama Anak 2</th>
+                        <th class="px-4 py-3 text-center border-r">Nama Anak 3</th>
+                        <th class="px-4 py-3 text-center border-r">Tinggal Serumah</th>
+                        <th class="px-4 py-3 text-center border-r">Hubungan</th>
+                        <th class="px-4 py-3 text-center border-r">Tidak Serumah</th>
+                        <th class="px-4 py-3 text-center border-r">Hubungan</th>
+                        <!-- <th class="px-4 py-3 text-center border-r">PPJPPKWT</th>
+                        <th class="px-4 py-3 text-center border-r">Status PPH</th>
+                        <th class="px-4 py-3 text-center border-r">Ibu Kandung</th>
+                        <th class="px-4 py-3 text-center border-r">HubKel12</th>
+                        <th class="px-4 py-3 text-center border-r">Sertifikasi</th>
+                        <th class="px-4 py-3 text-center border-r">Keterangan</th>
+                        <th class="px-4 py-3 text-center border-r">Status Pegawai</th>
+                        <th class="px-4 py-3 text-center border-r">Site</th> -->
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2">
+            <div id="modalImagePlaceholder">
+                <h2 class="font-bold mb-3">Foto</h2>
+                <div class="flex">
+                </div>
+            </div>
+            <div id="modalDocsPlaceholder">
+                <h2 class="font-bold mb-3">Dokumen</h2>
+                <div class="flex">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
