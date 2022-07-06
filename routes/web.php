@@ -21,13 +21,14 @@ Route::get('/', function () {
 })->name('dashboard');
 
 Route::get('/tabel-mp', [MPTableController::class, 'index'])->name('mp.index');
+Route::get('/tabel-mp/export', [MPTableController::class, 'fileExport'])->name('mp.export');
 Route::post('/tabel-mp/show', [MPTableController::class, 'getUserbyid'])->name('mp.show');
 Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
 // Login
-Route::post('custom-login', [C])
+// Route::post('custom-login', [C])
 
 
 require __DIR__.'/auth.php';

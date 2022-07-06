@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Exports\ExcelExport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\ArrayKey;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MPTableController extends Controller
 {
+
     public function index(Request $request){
         // Site
         $site = collect(DB::select(DB::raw("SELECT kodesite, namasite, lokasi
@@ -18,7 +18,7 @@ class MPTableController extends Controller
         ORDER BY namasite")));
 
         // Main Data
-        $data = DB::table('mp_biodata')
+        $this->data = DB::table('mp_biodata')
         ->select(DB::raw("
         site,
         NIK,
@@ -28,7 +28,7 @@ class MPTableController extends Controller
         hpkary,
         DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),tgllahir)), '%Y')+0 as tglLahir,
         DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),mulaikerja)), '%Y')+0 as mulaikerja,
-        id"))
+        nik"))
         ->when(request()->site, function($data){
             $data = $data->where('kodesite', '=', request()->site);
         })
@@ -42,17 +42,14 @@ class MPTableController extends Controller
         ->orderBy('nama')
         ->get();
 
-        // dd($data[0]->key);
-
         if(request()->jenisTampilan == "0" || is_null(request()->jenisTampilan)){
-            $data = $data->values()->paginate(request()->paginate ? request()->paginate : 50)->withQueryString();
+            $data = $this->data->values()->paginate(request()->paginate ? request()->paginate : 50)->withQueryString();
 
             return view('mp.index', compact('site', 'data'));
         }
         else{
-            $data = $data->values();
-            // dd();
-        
+            $data = $this->data->values();
+
             return view('mp.index', compact('site', 'data'));
         }
         
@@ -62,11 +59,18 @@ class MPTableController extends Controller
  
         $userid = $request->userid;
    
-        $data = DB::table('mp_biodata')->select('*')->where('id', $userid)->get();
-   
+        $data = DB::table('mp_biodata')->select('*')->where('nik', $userid)->get();
+        $dataDokumen = DB::table('mp_dokumen')->select('*')->where('nik', $userid)->get();
+
         // Fetch all records
         $response['data'] = $data;
-   
+        $response['dataDokumen'] = $dataDokumen;
+        
         return response()->json($response);
+    }
+
+    public function fileExport()
+    {
+        return Excel::download(new ExcelExport(), 'file.xls');   
     }
 }
