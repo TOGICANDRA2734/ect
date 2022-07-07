@@ -11,12 +11,14 @@ class ExcelExport implements FromCollection, WithHeadings
     /**
     * @return \Illuminate\Support\Collection
     */
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+
     public function collection()
     {
-        $type =  DB::table('mp_biodata')
-        ->select()
-        ->get();
-        return $type;
+        return $this->data;
     }
 
     public function headings():array
