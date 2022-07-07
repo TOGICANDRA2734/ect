@@ -15,9 +15,15 @@ class AuthenticatedSessionController extends Controller
      *
      * @return \Illuminate\View\View
      */
+
+    public function index()
+    {
+        return redirect()->route('login');
+    }
+
     public function create()
     {
-        return redirect()->route('dashboard');
+        return redirect()->route('login');
     }
 
     /**
@@ -49,6 +55,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('login');
     }
 }

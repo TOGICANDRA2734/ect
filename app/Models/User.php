@@ -14,7 +14,7 @@ class User extends Authenticatable
     /**
      * Protected table name
      */
-    protected $table = 'pma_user';
+    protected $table = 'mp_login';
 
     /**
      * The attributes that are mass assignable.
@@ -22,12 +22,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'namauser',
-        'nama',
-        'golongan',
-        'pic',
-        'kodesite',
-        'sandi',
+        'user',
+        'pass',
     ];
 
     /**
@@ -36,7 +32,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'sandi',
+        'pass',
         'remember_token',
     ];
 
@@ -56,7 +52,7 @@ class User extends Authenticatable
      */
     public function getAuthPassword()
     {
-        return $this->sandi;
+        return $this->pass;
     }
 
     public function getPicAttribute($pic){
