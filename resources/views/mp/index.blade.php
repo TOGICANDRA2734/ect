@@ -7,7 +7,7 @@
             Tabel MP
         </h2>
 
-        <form action="{{route('mp.index')}}" method="GET" class="grid grid-cols-3 gap-4">
+        <form action="{{route('mp.index')}}" method="GET" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div class="">
                 <label fo class="font-bold pb-1 text-xs md:text-sm" for="site">Nama Site</label>
                 <select class="p-2 border border-gray-100 rounded-md w-full text-xs md:text-base" name="site" id="site">
@@ -25,6 +25,15 @@
                     <option value="">Semua</option>
                     <option value="STAFF">Staff</option>
                     <option value="NON STAFF">Non-Staff</option>
+                </select>
+            </div>
+
+            <div class="">
+                <label class="font-bold pb-1 text-xs md:text-sm" for="statusKontrak">Stat. Kontrak</label>
+                <select class="p-2 border border-gray-100 rounded-md w-full text-xs md:text-base" name="statusKontrak" id="statusKontrak">
+                    <option value="">Semua</option>
+                    <option value="habisKontrak">Kontrak Segera Habis</option>
+                    <option value="masihKontrak">Dibawah Kontrak</option>
                 </select>
             </div>
 
@@ -177,6 +186,7 @@
         $('#tableKerja tbody').empty(); // Empty <tbody>
         $('#modalImagePlaceholder div').empty(); // Empty <image>
         $("#modalDocsPlaceholder tbody").empty();
+        $("#dataModal div").empty();
         if(response['data'] != null){
             len = response['data'].length;
         }
@@ -185,6 +195,33 @@
 
         if(len > 0){
             for(var i=0; i<len; i++){
+                // difference month
+                // monthDifference(new Date(), new Date(response['data'][0].akhirpkwt)) 
+                // response['data'][0].statuskary
+                if(response['data'][0].statuskary == "PKWT"){
+                    if(monthDifference(new Date(), new Date(response['data'][0].akhirpkwt)) <= 1){
+                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700'>" +
+                            "Kontrak Segera Habis - " + dateConverter(response['data'][0].akhirpkwt) +
+                        "</span>";        
+                    } else {
+                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100'>" +
+                            "Dibawah Kontrak"+
+                        "</span>";        
+                    }
+                }
+                else if (response['data'][0].statuskary == "PKWTT") {
+                    if(monthDifference(new Date(), new Date(response['data'][0].tglpensiun)) <= 6){
+                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700'>" +
+                            "Kontrak Segera Habis - " + dateConverter(response['data'][0].tglpensiun) +
+                        "</span>";        
+                    } else {
+                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100'>" +
+                            "Dibawah Kontrak"+
+                        "</span>";        
+                    }
+                }
+                $("#dataModal div").append(tr_modal);
+
                 var tr_str = 
                     "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                         "<th class='px-1 py-2 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>NIK</th>" +
@@ -320,106 +357,84 @@
                 var tr_str = 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Departemen</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].nik + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].dept + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Jabatan</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].nama + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].jabatan + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Status Pegawai</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].tempatlahir + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].sttpegawai + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Golongan</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + dateConverter(response['data'][0].tgllahir) + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].gol + "</td>" + 
                 "</tr>" + 
-                "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
+                "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+   
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Grade</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + Math.floor((new Date() - new Date(response['data'][0].tgllahir)) / (365.25*24*60*60*1000)) + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].grade + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Mulai Kerja</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].agama + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + dateConverter(response['data'][0].mulaikerja) + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Status Karyawan</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].warganegara + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].statuskary + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Akhir Kontrak</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].statusnikah + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + dateConverter(response['data'][0].akhirpkwt) + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Tanggal Pensiun</th>" +    
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].pendidikan + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + dateConverter(response['data'][0].tglpensiun) + "</td>" + 
                     "</tr>" +
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>No HP</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].ibukandung + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].hpkary + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Vaksin Covid-19</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].kelamin + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].vaksin1 + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Email</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].goldarah + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].emailkary + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Nama Istri</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].rhesus + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].namaistri + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Nama Anak 1</th>" +    
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].noktp + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].namaanak1 + "</td>" + 
                     "</tr>" +
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Nama Anak 2</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].nokk + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].namaanak2 + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Nama Anak 3</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].nonpwp + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].namaanak3 + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Tinggal Serumah</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].nobpjstk + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].tlpserumah + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Hubungan</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].nobpjskes + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].hubkel + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Tidak Serumah</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].norek + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].telptakrmh + "</td>" + 
                 "</tr>" + 
                 "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
                     "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Hubungan</th>" +
-                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].norek + "</td>" + 
+                    "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].hubkel2 + "</td>" + 
                 "</tr>";
-                // "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>"+
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].dept + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].jabatan + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].sttpegawai + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].gol + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].grade + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + dateConverter(response['data'][0].mulaikerja) + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].statuskary + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + dateConverter(response['data'][0].akhirpkwt) + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + dateConverter(response['data'][0].tglpensiun) + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].hpkary + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].vaksin1 + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].emailkary + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].namaistri + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].namaanak1 + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].namaanak2 + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].namaanak3 + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].tlpserumah + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].hubkel + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].telptakrmh + "</td>" +
-                //     "<td class='px-2 py-1 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].hubkel2 + "</td>";    
-                // "</tr>";
                 $("#tableKerja tbody").append(tr_str);
 
 
@@ -438,7 +453,9 @@
                     "</td>" + 
                 "</tr>";
                 $("#modalDocsPlaceholder tbody").append(dokumen_modal);
-                }
+
+
+            }
         }else{
             var tr_str = "<tr>" +
             "<td align='center' colspan='"+ response['data'][0][value].length +"'>No record found.</td>" +
@@ -446,19 +463,31 @@
     
             $("#tablePersonal tbody").append(tr_str);
         }
-
     }
     
     function dateConverter($value){
         var date = $value.split('-');
         return date[2] + '-' + date[1] + '-' + date[0];
     }
+
+    function monthDifference(d1, d2){
+        var months;
+        months = (d2.getFullYear() - d1.getFullYear()) * 12;
+        months -= d1.getMonth();
+        months += d2.getMonth();
+        return months;
+    }
 </script>
 @endsection
 
 
 @section('modal-body')
-    <h2 class="font-bold text-xl mb-3">Data Detail</h2>
+    <div id="dataModal" class="flex justify-between items-center">
+        <h2 class="font-bold text-xl mb-3">Data Detail</h2>
+        
+        <div>
+        </div>
+    </div>
     
     <!-- Table -->
     <div class="w-full overflow-hidden rounded-lg shadow-xs">

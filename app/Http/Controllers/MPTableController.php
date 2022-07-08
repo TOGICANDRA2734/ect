@@ -37,6 +37,26 @@ class MPTableController extends Controller
         })
         ->when(request()->nama, function($data){
             $data = $data->where('nama', 'like', '%'.request()->nama.'%');
+        })   
+        ->when(request()->statusKontrak, function($data){
+            if(request()->statusKontrak == 'habisKontrak'){
+                $data = $data
+                ->where(function($query){
+                    $query->where('statuskary', '=', 'PKWT')->whereRaw("TIMESTAMPDIFF(MONTH, akhirpkwt, CURDATE()) <= 1");
+                })
+                ->orWhere(function($query){
+                    $query->where('statuskary', '=', 'PKWTT')->whereRaw("TIMESTAMPDIFF(MONTH, akhirpkwt, CURDATE()) <= 6");
+                });
+            }
+            else if(request()->statusKontrak == 'masihKontrak'){
+                $data = $data
+                ->where(function($query){
+                    $query->where('statuskary', '=', 'PKWT')->whereRaw("TIMESTAMPDIFF(MONTH, akhirpkwt, CURDATE()) >= 1");
+                })
+                ->orWhere(function($query){
+                    $query->where('statuskary', '=', 'PKWTT')->whereRaw("TIMESTAMPDIFF(MONTH, akhirpkwt, CURDATE()) >= 6");
+                });
+            }
         })
         ->orderBy('site')
         ->orderBy('nama')
@@ -73,16 +93,7 @@ class MPTableController extends Controller
     {
         // Main Data
         $data = DB::table('mp_biodata')
-        ->select(DB::raw("
-        site,
-        NIK,
-        nama,
-        dept,
-        jabatan,
-        hpkary,
-        DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),tgllahir)), '%Y')+0 as tglLahir,
-        DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),mulaikerja)), '%Y')+0 as mulaikerja,
-        nik"))
+        ->select()
         ->when(request()->site, function($data){
             $data = $data->where('kodesite', '=', request()->site);
         })
@@ -91,6 +102,25 @@ class MPTableController extends Controller
         })
         ->when(request()->nama, function($data){
             $data = $data->where('nama', 'like', '%'.request()->nama.'%');
+        })->when(request()->statusKontrak, function($data){
+            if(request()->statusKontrak == 'habisKontrak'){
+                $data = $data
+                ->where(function($query){
+                    $query->where('statuskary', '=', 'PKWT')->whereRaw("TIMESTAMPDIFF(MONTH, akhirpkwt, CURDATE()) <= 1");
+                })
+                ->orWhere(function($query){
+                    $query->where('statuskary', '=', 'PKWTT')->whereRaw("TIMESTAMPDIFF(MONTH, akhirpkwt, CURDATE()) <= 6");
+                });
+            }
+            else if(request()->statusKontrak == 'masihKontrak'){
+                $data = $data
+                ->where(function($query){
+                    $query->where('statuskary', '=', 'PKWT')->whereRaw("TIMESTAMPDIFF(MONTH, akhirpkwt, CURDATE()) >= 1");
+                })
+                ->orWhere(function($query){
+                    $query->where('statuskary', '=', 'PKWTT')->whereRaw("TIMESTAMPDIFF(MONTH, akhirpkwt, CURDATE()) >= 6");
+                });
+            }
         })
         ->orderBy('site')
         ->orderBy('nama')
