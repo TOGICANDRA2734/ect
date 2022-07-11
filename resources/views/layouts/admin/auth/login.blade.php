@@ -9,7 +9,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="{{asset('css/tailwind.output.css')}}" />
     <script
       src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
       defer
@@ -27,13 +26,7 @@
             <img
               aria-hidden="true"
               class="object-cover w-full h-full dark:hidden"
-              src="https://dmi65.com/wp-content/uploads/2020/04/bigstock-Open-Pit-Mine-Industry-Big-Ye-325692259-1458x729.jpg"
-              alt="Office"
-            />
-            <img
-              aria-hidden="true"
-              class="hidden object-cover w-full h-full dark:block"
-              src="https://dmi65.com/wp-content/uploads/2020/04/bigstock-Open-Pit-Mine-Industry-Big-Ye-325692259-1458x729.jpg"
+              src="{{asset('Storage/Image/gambar.png')}}"
               alt="Office"
             />
           </div>

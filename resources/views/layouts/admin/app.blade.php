@@ -4,31 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//cdn.tailwindcss.com"></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="//fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="{{asset('css/tailwind.output.css')}}" />
     <script
-      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+      src="//cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
       defer
     ></script>
     <script src="{{asset('js/init-alpine.js')}}"></script>
-    <script type="text/javascript" src="date.js"></script>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"
+      href="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"
     />
     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+      src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
       defer
     ></script>
     <script src="{{asset('js/charts-lines.js')}}" defer></script>
     <script src="{{asset('js/dragup.js')}}" defer></script>
     <script src="{{asset('js/charts-pie.js')}}" defer></script>
     <meta name="csrf-token" content="{{csrf_token()}}"/>
-    <title>PT RCI | PMA 2023</title>
+    <title>PT RCI | Manpower</title>
 </head>
 <body>
     <div
@@ -44,7 +42,7 @@
             class="ml-6 text-xl uppercase  font-bold text-gray-800 dark:text-gray-200"
             href="#"
           >
-            PMA 2023
+            Manpower
           </a>
           <ul class="mt-6">
             <li class="relative px-6 py-3">
@@ -74,7 +72,7 @@
               </a>
             </li>
           </ul>
-          <ul>
+          <!-- <ul>
             <li class="relative px-6 py-3">
               <button
                 class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
@@ -95,12 +93,12 @@
                       d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
                     ></path>
                   </svg>
-                  <span class="ml-4">Laporan</span>
+                  <span class="ml-4">Statistik</span>
                 </span>
                 
               </button>
             </li>
-          </ul>
+          </ul> -->
           <div class="px-6 my-6">
             @if(null !== Auth::user())
             <form method="POST" action="{{ route('logout') }}">
@@ -149,7 +147,7 @@
             class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
             href="#"
           >
-            PMA 2023
+            Manpower
           </a>
           <ul class="mt-6">
             <li class="relative px-6 py-3">
@@ -179,7 +177,7 @@
               </a>
             </li>
           </ul>
-          <ul>
+          <!-- <ul>
             <li class="relative px-6 py-3">
               <button
                 class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
@@ -200,10 +198,22 @@
                       d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
                     ></path>
                   </svg>
-                  <span class="ml-4">Laporan</span>
+                  <span class="ml-4">Statistik</span>
                 </span>
                 
               </button>
+            </li>
+          </ul> -->
+          <ul>
+            <li class="relative px-6 py-3">
+              @if(null !== Auth::user())
+              <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
+                  Logout
+                </button>
+              </form>
+              @endif
             </li>
           </ul>
         </div>
@@ -404,7 +414,7 @@
     </div>
 
     
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     @if($errors->has('namauser') || $errors->has('sandi'))
       <script>
         $(function(){

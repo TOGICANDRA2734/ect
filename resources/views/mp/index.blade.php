@@ -7,8 +7,8 @@
             Tabel MP
         </h2>
 
-        <form action="{{route('mp.index')}}" method="GET" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="">
+        <form action="{{route('mp.index')}}" method="GET" class="grid grid-cols-2 sm:grid-cols-7 gap-4">
+            <div class="sm:col-span-2">
                 <label fo class="font-bold pb-1 text-xs md:text-sm" for="site">Nama Site</label>
                 <select class="p-2 border border-gray-100 rounded-md w-full text-xs md:text-base" name="site" id="site">
                     <option value="" selected>Semua Site</option>
@@ -19,7 +19,7 @@
                 </select>
             </div>
 
-            <div class="">
+            <div class="sm:col-span-2">
                 <label class="font-bold pb-1 text-xs md:text-sm" for="statusKaryawan">Stat. Karyawan</label>
                 <select class="p-2 border border-gray-100 rounded-md w-full text-xs md:text-base" name="statusKaryawan" id="statusKaryawan">
                     <option value="">Semua</option>
@@ -28,7 +28,7 @@
                 </select>
             </div>
 
-            <div class="">
+            <div class="sm:col-span-2">
                 <label class="font-bold pb-1 text-xs md:text-sm" for="statusKontrak">Stat. Kontrak</label>
                 <select class="p-2 border border-gray-100 rounded-md w-full text-xs md:text-base" name="statusKontrak" id="statusKontrak">
                     <option value="">Semua</option>
@@ -37,11 +37,10 @@
                 </select>
             </div>
 
-            <div class="flex relative">
-                <button class="w-4/6 md:w-5/6 p-2 border bg-stone-800 border-gray-100 rounded-md text-white font-bold hover:bg-gray-900 duration-150 ease-in-out">Cari</button>
-
+            <div class="relative py-2 px-4 border bg-stone-800 border-gray-100 rounded-md text-white font-bold hover:bg-gray-900 duration-150 ease-in-out flex justify-between items-center">
+                <button>Proses</button>
                 <a
-                    class="w-2/6 md:w-1/6 align-middle flex justify-center items-center rounded-md focus:shadow-outline-purple focus:outline-none bg-stone-800 text-white hover:bg-gray-900 duration-150 ease-in-out"
+                    class="align-middle flex justify-center items-center rounded-md focus:shadow-outline-purple focus:outline-none bg-stone-800 text-white hover:bg-gray-900 duration-150 ease-in-out"
                     @click="toggleConvertMenu"
                     @keydown.escape="closeConvertMenu"
                     aria-label="Account"
@@ -62,7 +61,7 @@
                     aria-label="submenu"
                     >
                         <li class="flex">
-                            <form action="{{route('mp.export')}}" method="GET">
+                            <form action="{{route('mp.export')}}" method="GET" class="w-full">
                                 @foreach (request()->all() as $key => $values) 
                                     <input type="hidden" name="{{$key}}" id="{{$key}}" class="text-black w-7 text-xs" value="{{$values}}">
                                 @endforeach
@@ -90,7 +89,7 @@
                         </li>
                     </ul>
                 </template>
-            </div>
+            </div> 
         </form>
 
         <form class="flex justify-end mt-5" action="{{route('mp.index')}}" method="GET">
