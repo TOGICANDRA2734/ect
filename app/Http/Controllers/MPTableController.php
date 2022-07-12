@@ -76,9 +76,9 @@ class MPTableController extends Controller
     }
 
     public function getUserbyid(Request $request){
- 
+
         $userid = $request->userid;
-   
+
         $data = DB::table('mp_biodata')->select('*')->where('nik', $userid)->get();
         $dataDokumen = DB::table('mp_dokumen')->select('*')->where('nik', $userid)->get();
 

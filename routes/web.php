@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\MPTableController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\statistikController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,9 +24,13 @@ Route::get('login', [CustomAuthController::class, 'index'])->name('login');
 Route::post('custom-login', [CustomAuthController::class, 'customLogin'])->name('login.custom');
 
 Route::group(['middleware' => 'auth'], function(){
+    // Table MP
     Route::get('/tabel-mp', [MPTableController::class, 'index'])->name('mp.index');
     Route::get('/tabel-mp/export', [MPTableController::class, 'fileExport'])->name('mp.export');
     Route::post('/tabel-mp/show', [MPTableController::class, 'getUserbyid'])->name('mp.show');
+    // Table Index
+    Route::get('/statistik', [statistikController::class, 'index'])->name('stats.index');
+
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
