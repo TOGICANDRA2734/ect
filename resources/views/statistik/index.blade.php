@@ -39,85 +39,239 @@
             </div>
         </form>
 
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-10">
+            <div id="piechart_3d" style="height: 20rem;"></div>
+            <div id="columnchart_material" style="height: 20rem;"></div>
+        </div>
+
         <!-- Content Table -->
         <div class="w-full overflow-hidden rounded-lg shadow-xs mt-5 mb-5">
-            <div class="w-full overflow-x-auto max-h-96 md:max-h-[38rem]">
-                <div class="grid grid-cols-4 gap-5">
-                    <div class="border-2 border-green-100">
-                        <span class="text-xs">Data 1</span>
-                        <table class="w-full table-auto text-sm">
-                            <thead class="border border-red-100">
-                                <tr>
-                                    <th>Keterangan</th>
-                                    <th>Jumlah</th>
-                                    <th>%</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>testing</td>
-                                    <td>testing</td>
-                                    <td class="text-center">95</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="w-full overflow-x-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                    <div class="">
+                        <span class="text-sm pb-2 block font-semibold">Data 1</span>
+                        <div class="overflow-y-scroll max-h-96 sm:max-h-[15rem]">
+                            <table class="w-full table-auto text-sm">
+                                <thead class="bg-stone-800 sticky top-0">
+                                    <tr class="text-xs font-semibold tracking-wide text-center text-white capitalize dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Keterangan</th>
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Jumlah</th>
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Total Manpower
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->total}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->total/$data[0]->total * 100}}
+                                        </td>
+                                    </tr>
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Total Staff
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->Total_staff}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format($data[0]->Total_staff / ($data[0]->Total_staff + $data[0]->Total_non_staff) * 100, 1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Total Non Staff
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->Total_non_staff}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format($data[0]->Total_non_staff / ($data[0]->Total_staff + $data[0]->Total_non_staff) * 100, 1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Total Pria
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->Total_pria}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format($data[0]->Total_pria / ($data[0]->Total_pria + $data[0]->Total_perempuan) * 100, 1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Total Wanita
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->Total_perempuan}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format($data[0]->Total_perempuan / ($data[0]->Total_pria + $data[0]->Total_perempuan) * 100, 1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Umur Dibawah 20
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->dibawah20}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format(($data[0]->dibawah20 / ($data[0]->dibawah20 + $data[0]->diatas20 + $data[0]->diatas30 + $data[0]->diatas40 + $data[0]->diatas50 + $data[0]->diatas60) * 100),1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Umur 20 - 30
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->diatas20}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format(($data[0]->diatas20 / ($data[0]->dibawah20 + $data[0]->diatas20 + $data[0]->diatas30 + $data[0]->diatas40 + $data[0]->diatas50 + $data[0]->diatas60) * 100),1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Umur 30-40
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->diatas30}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format(($data[0]->diatas30 / ($data[0]->dibawah20 + $data[0]->diatas20 + $data[0]->diatas30 + $data[0]->diatas40 + $data[0]->diatas50 + $data[0]->diatas60) * 100),1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Umur 40-50
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->diatas40}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format(($data[0]->diatas40 / ($data[0]->dibawah20 + $data[0]->diatas20 + $data[0]->diatas30 + $data[0]->diatas40 + $data[0]->diatas50 + $data[0]->diatas60) * 100),1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Umur 50-60
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->diatas50}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format(($data[0]->diatas50 / ($data[0]->dibawah20 + $data[0]->diatas20 + $data[0]->diatas30 + $data[0]->diatas40 + $data[0]->diatas50 + $data[0]->diatas60) * 100),1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            Umur 60++
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{$data[0]->diatas60}}
+                                        </td>
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format(($data[0]->diatas60 / ($data[0]->dibawah20 + $data[0]->diatas20 + $data[0]->diatas30 + $data[0]->diatas40 + $data[0]->diatas50 + $data[0]->diatas60) * 100),1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="border-2 border-green-100">
-                        <span class="text-xs">Jabatan</span>
-                        <table class="w-full table-auto text-sm">
-                            <thead class="border border-red-100">
-                                <tr>
-                                    <th>Keterangan</th>
-                                    <th>Jumlah</th>
-                                    <th>%</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>testing</td>
-                                    <td>testing</td>
-                                    <td class="text-center">95</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="">
+                        <span class="text-sm pb-2 block font-semibold">Jabatan</span>
+                        <div class="overflow-y-scroll max-h-96 sm:max-h-[15rem]">
+                            <table class="w-full table-auto text-sm">
+                                <thead class="bg-stone-800 sticky top-0">
+                                    <tr class="text-xs font-semibold tracking-wide text-center text-white capitalize dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Keterangan</th>
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Jumlah</th>
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                    @foreach($jabatan as $jbt)
+                                    <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                        @foreach($jbt as $j)
+                                            <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                                {{$j}}
+                                            </td>
+                                        @endforeach
+                                        <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                            {{number_format($jbt->Jum / $sumJabatan * 100, 1, ",", ".")}}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>      
+                        </div>
                     </div>
-                    <div class="border-2 border-green-100">
-                        <span class="text-xs">Departemen</span>
-                        <table class="w-full table-auto text-sm">
-                            <thead class="border border-red-100">
-                                <tr>
-                                    <th>Keterangan</th>
-                                    <th>Jumlah</th>
-                                    <th>%</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>testing</td>
-                                    <td>testing</td>
-                                    <td class="text-center">95</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="">
+                        <span class="text-sm pb-2 block font-semibold">Departemen</span>
+                        <div class="overflow-y-scroll max-h-96 sm:max-h-[15rem]">
+                            <table class="w-full table-auto text-sm">
+                                <thead class="bg-stone-800 sticky top-0">
+                                    <tr class="text-xs font-semibold tracking-wide text-center text-white capitalize dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Keterangan</th>
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Jumlah</th>
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                    @foreach($dept as $departemen)
+                                        <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                            @foreach($departemen as $j)
+                                                <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                                    {{$j}}
+                                                </td>
+                                            @endforeach
+                                            <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                                {{number_format($departemen->Jum / $sumJabatan * 100, 1, ",", ".")}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>    
+                        </div>
                     </div>
-                    <div class="border-2 border-green-100">
-                        <span class="text-xs">Alamat</span>
-                        <table class="w-full table-auto text-sm">
-                            <thead class="border border-red-100">
-                                <tr>
-                                    <th>Keterangan</th>
-                                    <th>Jumlah</th>
-                                    <th>%</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>testing</td>
-                                    <td>testing</td>
-                                    <td class="text-center">95</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="">
+                        <span class="text-sm pb-2 block font-semibold">Alamat</span>
+                        <div class="overflow-y-scroll max-h-96 sm:max-h-[15rem]">        
+                            <table class="w-full table-auto text-sm">
+                                <thead class="bg-stone-800 sticky top-0">
+                                    <tr class="text-xs font-semibold tracking-wide text-center text-white capitalize dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Keterangan</th>
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Jumlah</th>
+                                        <th class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                    @foreach($alamat as $al)
+                                        <tr class="data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150">
+                                            @foreach($al as $j)
+                                                <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                                    {{$j}}
+                                                </td>
+                                            @endforeach
+                                            <td class="px-2 py-1 md:px-4 md:py-3 text-sm">
+                                                {{number_format($al->Jum / $sumJabatan * 100, 1, ",", ".")}}
+                                            </td>
+                                        </tr>
+                                    @endforeach    
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,6 +282,55 @@
     function changeColor(el) {
         $('.data-row').removeClass('bg-gray-200', 'text-gray-700');
         $(el).addClass('bg-gray-200', 'text-white');
+    };    
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+        ['Task', 'Hours per Day'],
+        ['Work',     11],
+        ['Eat',      2],
+        ['Commute',  2],
+        ['Watch TV', 2],
+        ['Sleep',    7]
+    ]);
+
+    var options = {
+        title: 'Data Karyawan',
+        is3D: true,
     };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+        ['Year', 'Sales', 'Expenses', 'Profit'],
+        ['2014', 1000, 400, 200],
+        ['2015', 1170, 460, 250],
+        ['2016', 660, 1120, 300],
+        ['2017', 1030, 540, 350]
+    ]);
+
+    var options = {
+        chart: {
+        title: 'Company Performance',
+        subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+        }
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
 </script>
 @endsection

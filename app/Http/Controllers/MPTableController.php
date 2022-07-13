@@ -128,4 +128,14 @@ class MPTableController extends Controller
 
         return Excel::download(new ExcelExport($data), 'file.xls');   
     }
+
+    public function showChart()
+    {
+        $data = DB::table("mp_biodata")
+        ->select(DB::raw("
+            SUM(IF(KELAMIN='PRIA',1,0)) AS Total_pria,
+            SUM(IF(KELAMIN<>'PRIA',1,0)) AS Total_wanita,
+        "))
+        ->get();
+   }
 }
