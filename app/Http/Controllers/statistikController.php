@@ -72,6 +72,14 @@ class statistikController extends Controller
         ->groupBy('kec')
         ->get();
 
-        return view('statistik.index', compact('data', 'jabatan', 'sumJabatan', 'dept', 'alamat'));
+        // Making Pie Charts
+        $dataPie = [];
+        foreach($dept as $d){
+            $dataPie['label'][] = $d->KET;
+            $dataPie['data'][] = (int) $d->Jum;
+        }
+
+        $dataPie['chart_data'] = json_encode($dataPie);
+        return view('statistik.index', compact('data', 'jabatan', 'sumJabatan', 'dept', 'alamat', 'dataPie'));
     }
 }

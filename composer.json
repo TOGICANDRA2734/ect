@@ -9,6 +9,7 @@
         "barryvdh/laravel-debugbar": "^3.6",
         "barryvdh/laravel-dompdf": "^1.0",
         "codedge/laravel-fpdf": "^1.8",
+        "consoletvs/charts": "^7.3",
         "doctrine/dbal": "^3.3",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",

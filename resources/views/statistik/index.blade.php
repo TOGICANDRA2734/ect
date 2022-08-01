@@ -40,7 +40,11 @@
         </form>
 
         <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-10">
-            <div id="piechart_3d" style="height: 20rem;"></div>
+            <div class="chart-container">
+                <div class="pie-chart-container">
+                    <canvas id="pie-chart"></canvas>
+                </div>
+            </div>
             <div id="columnchart_material" style="height: 20rem;"></div>
         </div>
 
@@ -279,58 +283,68 @@
 </main>
 
 <script>
-    function changeColor(el) {
-        $('.data-row').removeClass('bg-gray-200', 'text-gray-700');
-        $(el).addClass('bg-gray-200', 'text-white');
-    };    
-</script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load("current", {packages:["corechart"]});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-        ['Task', 'Hours per Day'],
-        ['Work',     11],
-        ['Eat',      2],
-        ['Commute',  2],
-        ['Watch TV', 2],
-        ['Sleep',    7]
-    ]);
-
-    var options = {
-        title: 'Data Karyawan',
-        is3D: true,
-    };
-
-    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-        chart.draw(data, options);
-    }
-</script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load('current', {'packages':['bar']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-        ['Year', 'Sales', 'Expenses', 'Profit'],
-        ['2014', 1000, 400, 200],
-        ['2015', 1170, 460, 250],
-        ['2016', 660, 1120, 300],
-        ['2017', 1030, 540, 350]
-    ]);
-
-    var options = {
-        chart: {
-        title: 'Company Performance',
-        subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+  $(function(){
+      //get the pie chart canvas
+      var cData = JSON.parse(`<?php echo $dataPie['chart_data']; ?>`);
+      var ctx = $("#pie-chart");
+ 
+      //pie chart data
+      var data = {
+        labels: cData.label,
+        datasets: [
+          {
+            label: "Users Count",
+            data: cData.data,
+            backgroundColor: [
+              "#DEB887",
+              "#A9A9A9",
+              "#DC143C",
+              "#F4A460",
+              "#2E8B57",
+              "#1D7A46",
+              "#CDA776",
+            ],
+            borderColor: [
+              "#CDA776",
+              "#989898",
+              "#CB252B",
+              "#E39371",
+              "#1D7A46",
+              "#F4A460",
+              "#CDA776",
+            ],
+            borderWidth: [1, 1, 1, 1, 1,1,1]
+          }
+        ]
+      };
+ 
+      //options
+      var options = {
+        responsive: true,
+        title: {
+          display: true,
+          position: "top",
+          text: "Last Week Registered Users -  Day Wise Count",
+          fontSize: 18,
+          fontColor: "#111"
+        },
+        legend: {
+          display: true,
+          position: "bottom",
+          labels: {
+            fontColor: "#333",
+            fontSize: 16
+          }
         }
-    };
-
-    var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
-
-    chart.draw(data, google.charts.Bar.convertOptions(options));
-    }
+      };
+ 
+      //create Pie Chart class object
+      var chart1 = new Chart(ctx, {
+        type: "pie",
+        data: data,
+        options: options
+      });
+ 
+  });
 </script>
 @endsection
