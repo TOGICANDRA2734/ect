@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CustomAuthController;
+use App\Http\Controllers\MPController;
 use App\Http\Controllers\MPTableController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
@@ -25,9 +26,12 @@ Route::post('custom-login', [CustomAuthController::class, 'customLogin'])->name(
 
 Route::group(['middleware' => 'auth'], function(){
     // Table MP
-    Route::resource('tabel-mp', [MPTableController::class, 'index']);
+    Route::get('/tabel-mp', [MPTableController::class, 'index'])->name('mp.index');
     Route::get('/tabel-mp/export', [MPTableController::class, 'fileExport'])->name('mp.export');
     Route::post('/tabel-mp/show', [MPTableController::class, 'getUserbyid'])->name('mp.show');
+
+    // Transaksi
+    Route::resource('tabel-mp', MPController::class);
 
     // Table Index
     Route::get('/statistik', [statistikController::class, 'index'])->name('stats.index');
