@@ -25,9 +25,10 @@ Route::post('custom-login', [CustomAuthController::class, 'customLogin'])->name(
 
 Route::group(['middleware' => 'auth'], function(){
     // Table MP
-    Route::get('/tabel-mp', [MPTableController::class, 'index'])->name('mp.index');
+    Route::resource('tabel-mp', [MPTableController::class, 'index']);
     Route::get('/tabel-mp/export', [MPTableController::class, 'fileExport'])->name('mp.export');
     Route::post('/tabel-mp/show', [MPTableController::class, 'getUserbyid'])->name('mp.show');
+
     // Table Index
     Route::get('/statistik', [statistikController::class, 'index'])->name('stats.index');
 
