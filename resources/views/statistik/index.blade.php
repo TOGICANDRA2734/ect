@@ -324,7 +324,7 @@
         title: {
           display: true,
           position: "top",
-          text: "Last Week Registered Users -  Day Wise Count",
+          text: "Persebaran Tenaga Pekerja",
           fontSize: 18,
           fontColor: "#111"
         },

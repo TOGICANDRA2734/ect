@@ -30,9 +30,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/tabel-mp/export', [MPTableController::class, 'fileExport'])->name('mp.export');
     Route::post('/tabel-mp/show', [MPTableController::class, 'getUserbyid'])->name('mp.show');
 
-    // Transaksi
-    Route::resource('tabel-mp', MPController::class);
-
     // Table Index
     Route::get('/statistik', [statistikController::class, 'index'])->name('stats.index');
 
